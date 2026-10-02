@@ -1,3 +1,4 @@
+# ignore all files in the root directory 
 # compiled output
 /dist
 /node_modules
