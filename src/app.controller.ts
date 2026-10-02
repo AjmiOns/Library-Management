@@ -1,12 +1,56 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
+import { AppService } from './app.service.js';
+import type { Request, Response } from 'express';
 
-@Controller()
+@Controller('tekup')
 export class AppController {
+  // @Inject(AppService) app1;
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('test')
+  getHello(@Req() requete: Request): string {
+    console.log(requete);
+    return '<h1>Classe CIM C </h1>';
+  }
+
+  @Get(':id')
+  getTitleById(@Param() p: any) {
+    console.log(p);
+    return { message: `L'id récupéré est ${p.id}` }; // et la catégorie est ${p.category}`}
+  }
+
+  @Get('file')
+  getfile(@Res() reponse: Response) {
+    reponse.sendFile('index.html', { root: 'src' });
+  }
+
+  @Get('title')
+  getTitle(@Res() reponse: Response) {
+    reponse.send({ message: 'Titre du cours' });
+  }
+
+  @Post('add')
+  postTitle(@Body() corps: any) {
+    return { body: corps };
+  }
+
+  //@Get('all/:id/by/:category')
+
+  @Get('all')
+  getTitles(@Query() qp: any) {
+    console.log(qp);
+    return {
+      message: `Le premier queryParams ${qp.page} et le second est ${qp.online}`,
+    };
   }
 }
